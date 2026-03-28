@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Urbanist:wght@400;500;600;700&display=swap');
+
+:root {
+  --color-primary: #d1ae62;
+  --color-primary-soft: #f1e9d0;
+  --color-dark: #0d0d0d;
+  --color-muted: #6a6a6a;
+  --color-light: #fff;
+  --color-panel: #fff7f4;
+  --color-border: #e7dfcf;
+  --container: min(1320px, calc(100% - 2rem));
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Urbanist', sans-serif;
+  color: var(--color-dark);
+  background: #fff;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
