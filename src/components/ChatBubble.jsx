@@ -1,4 +1,5 @@
 import MessageActions from './MessageActions';
+import DrugWiseLogo from '../assets/DrugWiseLogo';
 
 function parseBold(text) {
   const parts = text.split(/(\*\*[^*]+\*\*)/g);
@@ -63,24 +64,22 @@ function parseMarkdown(text) {
 export default function ChatBubble({ message, isUser, onRegenerate, isError }) {
   if (isUser) {
     return (
-      <div className="flex flex-col items-end gap-1">
+      <div className="flex flex-col items-end gap-1 animate-message-user">
         <span className="text-xs text-slate-400 mr-1">Me</span>
-        <div className="bg-blue-50 rounded-xl px-4 py-3 max-w-lg">
-          <p className="text-slate-700 text-base">{message.text}</p>
+        <div className="bg-blue-600 rounded-2xl px-4 py-3 max-w-lg">
+          <p className="text-white text-base">{message.text}</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="flex items-start gap-3">
-      <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center flex-shrink-0 mt-1">
-        <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
-        </svg>
+    <div className="flex items-start gap-3 animate-message-bot">
+      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-600 to-teal-500 flex items-center justify-center flex-shrink-0 mt-1 p-1.5">
+        <DrugWiseLogo size={32} />
       </div>
       <div className="flex-1 max-w-2xl">
-        <div className={`rounded-xl shadow-sm px-4 py-3 space-y-0.5 ${isError || message.isError ? 'bg-red-50 border border-red-200' : 'bg-white'}`}>
+        <div className={`rounded-2xl shadow-sm px-4 py-3 space-y-0.5 ${isError || message.isError ? 'bg-red-50 border border-red-200' : 'bg-white'}`}>
           {parseMarkdown(message.text)}
         </div>
         <MessageActions message={message.text} onRegenerate={onRegenerate} />

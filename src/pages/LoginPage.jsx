@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Eye, EyeOff, Pill } from 'lucide-react';
+import { Eye, EyeOff } from 'lucide-react';
+import DrugWiseLogo from '../assets/DrugWiseLogo';
 
 const HEX_POSITIONS = [
   [100, 100], [260, 190], [420, 80], [560, 240], [160, 340],
@@ -8,11 +9,16 @@ const HEX_POSITIONS = [
   [300, 520], [480, 440], [720, 460], [200, 260],
 ];
 
+// Split hexagons into groups for different float speeds
+const TOP_LEFT_HEXES = [0, 1, 2, 6, 9];        // animate-float-delayed
+const BOTTOM_RIGHT_HEXES = [3, 4, 5, 7, 8, 10, 11, 12, 13]; // animate-float-slow
+
 export default function LoginPage() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [btnGlow, setBtnGlow] = useState(false);
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -20,9 +26,9 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex h-full">
+    <div className="flex h-full relative">
       {/* LEFT — gradient panel */}
-      <div className="hidden md:flex w-3/5 relative bg-gradient-to-br from-blue-700 via-blue-600 to-teal-500 items-center justify-center overflow-hidden">
+      <div className="hidden md:flex w-3/5 relative bg-gradient-to-br from-blue-600 via-blue-500 to-teal-400 items-center justify-center overflow-hidden">
         {/* Faint wireframe hexagons */}
         <svg
           className="absolute inset-0 w-full h-full opacity-10 pointer-events-none"
@@ -34,6 +40,11 @@ export default function LoginPage() {
               const angle = (Math.PI / 180) * (60 * k - 30);
               return `${cx + r * Math.cos(angle)},${cy + r * Math.sin(angle)}`;
             }).join(' ');
+            const animClass = TOP_LEFT_HEXES.includes(i)
+              ? 'animate-float-delayed'
+              : BOTTOM_RIGHT_HEXES.includes(i)
+              ? 'animate-float-slow'
+              : '';
             return (
               <polygon
                 key={i}
@@ -41,13 +52,20 @@ export default function LoginPage() {
                 fill="none"
                 stroke="white"
                 strokeWidth="1.5"
+                className={animClass}
               />
             );
           })}
         </svg>
 
+        {/* Radial glow behind center cluster */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{ background: 'radial-gradient(circle at center, rgba(255,255,255,0.15) 0%, transparent 65%)' }}
+        />
+
         {/* Center medical cross hex cluster */}
-        <div className="relative z-10 flex flex-col items-center gap-4">
+        <div className="relative z-10 flex flex-col items-center gap-4 animate-float">
           <svg
             width="200"
             height="200"
@@ -96,20 +114,24 @@ export default function LoginPage() {
           </svg>
 
           <div className="text-center">
-            <h1 className="text-white text-4xl font-bold tracking-wide">DrugWise</h1>
-            <p className="text-blue-100 text-base mt-1">Where Knowledge Meets Care</p>
+            <h1 className="text-white text-5xl font-bold tracking-wide">DrugWise</h1>
+            <p className="text-blue-200 text-base mt-1">Your Powerful AI Drug Assistant</p>
           </div>
         </div>
       </div>
 
+      {/* Gradient divider line */}
+      <div className="hidden md:block absolute top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-blue-200 to-transparent" style={{ left: '59.5%' }} />
+
       {/* RIGHT — login form */}
-      <div className="flex-1 md:w-2/5 bg-white flex flex-col items-center justify-between py-10 px-8">
-        <div className="w-full max-w-sm flex-1 flex flex-col justify-center">
+      <div className="flex-1 md:w-2/5 bg-white border-l border-gray-100 flex flex-col items-center justify-between py-10 px-20">
+        <div
+          className="w-full max-w-sm flex-1 flex flex-col justify-center animate-fade-in-up opacity-0"
+          style={{ animationDelay: '0.2s' }}
+        >
           {/* Logo */}
           <div className="flex items-center gap-2 mb-8">
-            <div className="w-9 h-9 rounded-full bg-blue-600 flex items-center justify-center">
-              <Pill className="w-5 h-5 text-white" />
-            </div>
+            <DrugWiseLogo size={36} />
             <span className="text-blue-600 font-bold text-xl">DrugWise</span>
           </div>
 
@@ -126,7 +148,7 @@ export default function LoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
-                className="w-full border border-slate-200 rounded-xl px-4 py-3 text-base outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition"
+                className="w-full border border-slate-200 rounded-xl px-4 py-3 text-base outline-none transition-all duration-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:shadow-[0_0_0_4px_rgba(37,99,235,0.1)]"
               />
             </div>
 
@@ -140,7 +162,7 @@ export default function LoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter your password"
-                  className="w-full border border-slate-200 rounded-xl px-4 py-3 text-base outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition pr-10"
+                  className="w-full border border-slate-200 rounded-xl px-4 py-3 text-base outline-none pr-10 transition-all duration-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:shadow-[0_0_0_4px_rgba(37,99,235,0.1)]"
                 />
                 <button
                   type="button"
@@ -168,7 +190,10 @@ export default function LoginPage() {
 
             <button
               type="submit"
+              onMouseEnter={() => setBtnGlow(true)}
+              onMouseLeave={() => setBtnGlow(false)}
               className="w-full bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white font-semibold py-3.5 rounded-full transition text-base shadow-sm mt-2"
+              style={btnGlow ? { animation: 'pulse-glow 2s ease-in-out infinite' } : {}}
             >
               Log in
             </button>

@@ -1,5 +1,8 @@
-import { useState } from 'react';
-import { Phone, Mail, Calendar, MapPin, User, Users, X } from 'lucide-react';
+import { useState, useRef } from 'react';
+import { Phone, Mail, Calendar, MapPin, User, User2, UserCheck, X, Pill, Camera, MoreVertical, Sun, Moon } from 'lucide-react';
+import profilePhoto from '../assets/profile.jpg';
+import useUserProfile from '../hooks/useUserProfile';
+import useDarkMode from '../hooks/useDarkMode';
 
 const STATUS_COLORS = {
   active: 'bg-green-500',
@@ -11,6 +14,19 @@ export default function UserProfileCard({ drugs, addDrug, deleteDrug }) {
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({ name: '', dosage: '', schedule: '', status: 'active' });
 
+  const { profile, updateAvatar } = useUserProfile();
+  const { isDark, toggleDark } = useDarkMode();
+  const fileInputRef = useRef(null);
+
+  const handleAvatarUpload = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => updateAvatar(ev.target.result);
+    reader.readAsDataURL(file);
+    e.target.value = '';
+  };
+
   const handleAdd = () => {
     if (!form.name.trim()) return;
     addDrug(form.name.trim(), form.dosage.trim(), form.schedule.trim(), form.status);
@@ -18,68 +34,142 @@ export default function UserProfileCard({ drugs, addDrug, deleteDrug }) {
     setShowForm(false);
   };
 
+  const avatarSrc = profile.avatarUrl || profilePhoto;
+
   return (
     <div>
-      <div className="bg-white rounded-xl shadow-sm p-4">
-        {/* Avatar placeholder */}
-        <div className="w-full h-36 bg-slate-100 rounded-xl mb-3 flex items-center justify-center">
-          <User className="w-12 h-12 text-slate-300" />
+      {/* ── Profile card — full photo, no white section ── */}
+      <div className="relative w-full h-80 rounded-2xl overflow-hidden shadow-md">
+
+        {/* Layer 1 — Photo */}
+        <img
+          src={avatarSrc}
+          alt="An Loc Nguyen"
+          className="absolute inset-0 w-full h-full object-cover object-top"
+          onError={(e) => {
+            e.target.style.display = 'none';
+            e.target.nextSibling.style.display = 'flex';
+          }}
+        />
+        {/* Fallback — hidden unless image fails */}
+        <div
+          className="absolute inset-0 bg-gradient-to-br from-blue-100 to-teal-100 items-center justify-center hidden"
+        >
+          <User className="w-16 h-16 text-slate-300" />
         </div>
 
-        <h3 className="font-semibold text-slate-800 text-base">Guest User</h3>
+        {/* Layer 2 — Dark gradient overlay */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              'linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.55) 40%, rgba(0,0,0,0.1) 70%, transparent 100%)',
+          }}
+        />
 
-        <div className="flex items-center gap-3 mt-1.5 text-sm text-slate-500">
-          <div className="flex items-center gap-1">
-            <Users className="w-4 h-4" />
-            <span>User</span>
-          </div>
-          <span className="text-slate-200">|</span>
-          <div className="flex items-center gap-1">
-            <User className="w-4 h-4" />
-            <span>Patient</span>
-          </div>
-        </div>
+        {/* Layer 3 — Info stack, pinned to bottom */}
+        <div className="absolute bottom-0 left-0 right-0 px-4 pb-4 flex flex-col gap-1.5">
+          {/* Name */}
+          <span className="text-white font-semibold text-sm leading-tight mb-1">
+            Nguyen An Loc
+          </span>
 
-        <div className="mt-3 space-y-2 text-sm text-slate-500">
-          <div className="flex items-center gap-2">
-            <Phone className="w-4 h-4 flex-shrink-0" />
-            <span>+-- --- ---</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <Mail className="w-4 h-4 flex-shrink-0" />
-            <span>user@example.com</span>
-          </div>
-          <div className="flex items-center gap-3">
+          {/* Gender + Role */}
+          <div className="flex items-center gap-4">
             <div className="flex items-center gap-1.5">
-              <Calendar className="w-4 h-4" />
-              <span>Age: --</span>
+              <User2 className="w-3 h-3 text-white/70 flex-shrink-0" />
+              <span className="text-[11px] text-white/80">Male</span>
             </div>
-            <span className="text-slate-200">|</span>
             <div className="flex items-center gap-1.5">
-              <MapPin className="w-4 h-4" />
-              <span>Location</span>
+              <UserCheck className="w-3 h-3 text-white/70 flex-shrink-0" />
+              <span className="text-[11px] text-white/80">Patient</span>
+            </div>
+          </div>
+
+          {/* Phone */}
+          <div className="flex items-center gap-1.5">
+            <Phone className="w-3 h-3 text-white/70 flex-shrink-0" />
+            <span className="text-[11px] text-white/80">+65 9131 5790</span>
+          </div>
+
+          {/* Email */}
+          <div className="flex items-center gap-1.5">
+            <Mail className="w-3 h-3 text-white/70 flex-shrink-0" />
+            <span className="text-[11px] text-white/80">anlocngdz@gmail.com</span>
+          </div>
+
+          {/* Age + Location */}
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-1.5">
+              <Calendar className="w-3 h-3 text-white/70 flex-shrink-0" />
+              <span className="text-[11px] text-white/80">
+                Age: <span className="text-white font-semibold">20</span>
+              </span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <MapPin className="w-3 h-3 text-white/70 flex-shrink-0" />
+              <span className="text-[11px] text-white/80">Singapore</span>
             </div>
           </div>
         </div>
+
+        {/* Layer 4 — Top controls */}
+        {/* Camera button — top-left */}
+        <button
+          onClick={() => fileInputRef.current?.click()}
+          className="absolute top-3 left-3 bg-black/30 hover:bg-black/50 backdrop-blur-sm rounded-full p-1.5 cursor-pointer transition-colors z-10"
+          title="Upload photo"
+        >
+          <Camera className="w-4 h-4 text-white" />
+        </button>
+
+        {/* Dark Mode toggle — top-right */}
+        <button
+          onClick={toggleDark}
+          className="absolute top-3 right-10 bg-black/30 hover:bg-black/50 backdrop-blur-sm rounded-full p-1.5 cursor-pointer transition-colors z-10 mr-1"
+          title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
+        >
+          {isDark ? <Sun className="w-4 h-4 text-white" /> : <Moon className="w-4 h-4 text-white" />}
+        </button>
+
+        {/* Three-dot menu — top-right corner */}
+        <button
+          className="absolute top-3 right-3 cursor-pointer z-10 drop-shadow"
+          title="Options"
+        >
+          <MoreVertical className="w-5 h-5 text-white" />
+        </button>
       </div>
 
-      {/* Drug Management */}
-      <div className="mt-5">
-        <h3 className="font-semibold text-base text-slate-700 mb-3">Drug management</h3>
+      {/* Hidden file input */}
+      <input
+        type="file"
+        accept="image/*"
+        className="hidden"
+        ref={fileInputRef}
+        onChange={handleAvatarUpload}
+      />
+
+      {/* ── Drug Management ── */}
+      <div className="mt-4">
+        <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3 flex items-center">
+          <Pill className="w-4 h-4 text-blue-500 mr-1.5 inline-flex" />
+          Drug management
+        </h3>
 
         {drugs.length === 0 ? (
-          <p className="text-xs text-gray-400 italic text-center py-3">No medications tracked</p>
+          <p className="text-sm text-gray-400 italic text-center py-3">No medications tracked</p>
         ) : (
-          <div className="space-y-1.5">
+          <div>
             {drugs.map((drug) => (
-              <div key={drug.id} className="flex items-start gap-2 group">
+              <div key={drug.id} className="flex items-start gap-2 group py-1.5 border-b border-gray-100 last:border-0">
                 <span
                   className={`w-2 h-2 min-w-2 rounded-full ${STATUS_COLORS[drug.status] || 'bg-green-500'} flex-shrink-0 mt-1.5`}
                 />
                 <div className="flex-1 min-w-0">
-                  <p className="text-xs text-slate-700">
+                  <p className="text-sm font-medium text-gray-700">
                     {drug.name}
-                    {drug.dosage && <span className="text-slate-400"> — {drug.dosage}</span>}
+                    {drug.dosage && <span className="text-sm text-gray-400 font-normal"> — {drug.dosage}</span>}
                   </p>
                   {drug.schedule && (
                     <p className="text-xs text-gray-400">{drug.schedule}</p>
@@ -140,13 +230,13 @@ export default function UserProfileCard({ drugs, addDrug, deleteDrug }) {
               <button
                 onClick={handleAdd}
                 disabled={!form.name.trim()}
-                className="flex-1 text-xs bg-blue-600 text-white rounded-lg py-1.5 hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 text-sm bg-blue-600 text-white rounded-lg py-1.5 hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Add
               </button>
               <button
                 onClick={() => setShowForm(false)}
-                className="flex-1 text-xs border border-slate-200 text-slate-600 rounded-lg py-1.5 hover:bg-slate-50 transition"
+                className="flex-1 text-sm border border-slate-200 text-slate-600 rounded-lg py-1.5 hover:bg-slate-50 transition"
               >
                 Cancel
               </button>
@@ -155,7 +245,7 @@ export default function UserProfileCard({ drugs, addDrug, deleteDrug }) {
         ) : (
           <button
             onClick={() => setShowForm(true)}
-            className="mt-3 text-sm text-blue-600 hover:underline transition"
+            className="border border-dashed border-blue-300 text-blue-500 text-xs rounded-lg px-3 py-1.5 hover:bg-blue-50 hover:border-blue-400 transition-all duration-150 w-full text-center mt-2 block"
           >
             + Add medication
           </button>

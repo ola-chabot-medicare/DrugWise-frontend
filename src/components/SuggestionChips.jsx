@@ -13,7 +13,8 @@ export default function SuggestionChips({ onSelect }) {
           <button
             key={i}
             onClick={() => onSelect(s)}
-            className="border border-slate-200 rounded-xl px-5 py-3 text-base text-slate-600 hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700 transition text-left shadow-sm max-w-xs"
+            style={{ animationDelay: `${i * 80}ms` }}
+            className="border border-slate-200 rounded-xl px-5 py-3 text-base text-slate-600 hover:scale-[1.02] hover:shadow-md hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700 transition-all duration-150 cursor-pointer text-left shadow-sm max-w-xs opacity-0 animate-fade-in-up"
           >
             {s}
           </button>

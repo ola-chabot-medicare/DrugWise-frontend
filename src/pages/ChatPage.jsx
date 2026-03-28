@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { Search } from 'lucide-react';
+import DrugWiseLogo from '../assets/DrugWiseLogo';
 import UserProfileCard from '../components/UserProfileCard';
 import RightSidebar from '../components/RightSidebar';
 import ChatBubble from '../components/ChatBubble';
@@ -96,11 +97,9 @@ export default function ChatPage() {
     try {
       const data = await sendMessage(trimmed);
       const botMsg = { id: `b-${Date.now()}`, text: extractReply(data), isUser: false };
-      setMessages((prev) => {
-        const updated = [...prev, botMsg];
-        chatHistory.saveSession(sessionId, updated);
-        return updated;
-      });
+      const updatedMessages = [...nextMessages, botMsg];
+      setMessages(updatedMessages);
+      chatHistory.saveSession(sessionId, updatedMessages);
     } catch (err) {
       const errMsg = {
         id: `b-${Date.now()}`,
@@ -110,11 +109,9 @@ export default function ChatPage() {
         isUser: false,
         isError: true,
       };
-      setMessages((prev) => {
-        const updated = [...prev, errMsg];
-        chatHistory.saveSession(sessionId, updated);
-        return updated;
-      });
+      const updatedMessages = [...nextMessages, errMsg];
+      setMessages(updatedMessages);
+      chatHistory.saveSession(sessionId, updatedMessages);
     } finally {
       setIsLoading(false);
     }
@@ -192,14 +189,14 @@ export default function ChatPage() {
   };
 
   return (
-    <div className="flex h-full overflow-hidden bg-slate-50">
+    <div className="flex h-full overflow-hidden bg-[#F0F4F9]">
       {/* ── LEFT SIDEBAR ── */}
-      <div className="w-90 bg-gray-50 border-r border-slate-100 flex flex-col p-5 overflow-y-auto flex-shrink-0">
+      <div className="w-96 bg-white border-r border-gray-100 flex flex-col p-5 overflow-y-auto flex-shrink-0">
         <UserProfileCard drugs={drugs} addDrug={addDrug} deleteDrug={deleteDrug} />
       </div>
 
       {/* ── CENTER PANEL ── */}
-      <div className="flex-1 flex flex-col min-w-0 overflow-hidden bg-slate-50">
+      <div className="flex-1 flex flex-col min-w-0 overflow-hidden bg-[#F0F4F9]">
         {/* Search bar */}
         <div className="px-6 pt-4 pb-3 flex-shrink-0">
           <div className="flex items-center gap-2 bg-white border border-slate-200 rounded-full px-4 py-2.5 shadow-sm focus-within:border-blue-300 transition">
@@ -216,59 +213,30 @@ export default function ChatPage() {
 
         {/* Message area */}
         <div className="flex-1 overflow-y-auto">
-          {!hasUserMessages ? (
-            /* ─── EMPTY STATE ─── */
-            <div className="flex flex-col items-center justify-center min-h-full px-6 py-8">
-              {/* Logo */}
-              <div className="flex flex-col items-center gap-2 mb-6">
-                <div className="w-16 h-16 rounded-full bg-blue-600 flex items-center justify-center shadow-md">
-                  <svg
-                    className="w-8 h-8 text-white"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2.5}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M12 4v16m8-8H4"
-                    />
-                  </svg>
-                </div>
-                <span className="font-bold text-2xl text-blue-600 tracking-widest">
-                  DRUGWISE
-                </span>
-              </div>
+          <div className="px-6 py-4 space-y-4">
+            {messages.map((msg) => (
+              <ChatBubble
+                key={msg.id}
+                message={msg}
+                isUser={msg.isUser}
+                isError={msg.isError}
+                onRegenerate={handleRegenerate}
+              />
+            ))}
+            {isLoading && <TypingIndicator />}
+            <div ref={messagesEndRef} />
+          </div>
 
-              {/* Initial bot message */}
-              <div className="w-full max-w-2xl">
-                <ChatBubble
-                  message={INITIAL_MESSAGE}
-                  isUser={false}
-                  onRegenerate={() => {}}
-                />
+          {!hasUserMessages && (
+            <div className="flex flex-col items-center px-6 pb-8">
+              <div className="animate-float">
+                <DrugWiseLogo size={64} />
               </div>
-
-              <p className="text-2xl text-slate-700 font-medium mt-8 text-center">
+              <p className="text-2xl font-light text-gray-500 mt-4">
                 Ask DrugWise anything...
               </p>
+              <div className="w-12 h-0.5 bg-gradient-to-r from-blue-400 to-teal-400 mx-auto my-4 rounded-full" />
               <SuggestionChips onSelect={handleSend} />
-            </div>
-          ) : (
-            /* ─── ACTIVE CHAT ─── */
-            <div className="px-6 py-4 space-y-4">
-              {messages.map((msg) => (
-                <ChatBubble
-                  key={msg.id}
-                  message={msg}
-                  isUser={msg.isUser}
-                  isError={msg.isError}
-                  onRegenerate={handleRegenerate}
-                />
-              ))}
-              {isLoading && <TypingIndicator />}
-              <div ref={messagesEndRef} />
             </div>
           )}
         </div>

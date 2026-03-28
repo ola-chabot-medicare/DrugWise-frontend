@@ -35,7 +35,7 @@ export default function useChatHistory() {
   const createSession = useCallback((firstMessageText) => {
     const id = `session-${Date.now()}`;
     const title = firstMessageText
-      ? firstMessageText.slice(0, 40) + (firstMessageText.length > 40 ? '...' : '')
+      ? firstMessageText.slice(0, 35) + (firstMessageText.length > 35 ? '...' : '')
       : 'New chat';
     const session = {
       id,
@@ -59,7 +59,7 @@ export default function useChatHistory() {
         const next = prev.map((s) => {
           if (s.id !== id) return s;
           const title = firstUserMsg
-            ? firstUserMsg.text.slice(0, 40) + (firstUserMsg.text.length > 40 ? '...' : '')
+            ? firstUserMsg.text.slice(0, 35) + (firstUserMsg.text.length > 35 ? '...' : '')
             : s.title;
           return { ...s, messages, title, updatedAt: new Date().toISOString() };
         });
