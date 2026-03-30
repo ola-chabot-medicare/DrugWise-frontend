@@ -1,4 +1,4 @@
-# 💊 DrugWise Frontend
+# DrugWise Frontend
 
 DrugWise is a smart, interactive medical chatbot interface. It connects to a powerful AI backend to instantly answer complex medical questions based on real FDA drug data. 
 
@@ -19,7 +19,7 @@ The goal of this application is to make finding drug information as easy, safe, 
 - **Axios** 🌐 (To safely connect to the Python AI backend)
 - **Lucide React** 🎨 (For all the clean UI icons)
 
-## 🚀 How to Run Locally
+## 🚀 How to run locally
 
 Want to try it yourself? Here's how to get it running on your computer:
 
@@ -41,4 +41,4 @@ Want to try it yourself? Here's how to get it running on your computer:
 
 4. **Open your browser** to `http://localhost:5173`! 🎉
 
-*(Note: To actually use the chatbot feature, you must also be running the separate DrugWise Backend server at the same time).*
+*(Note: To actually use the chatbot feature, you must also be running the separate DrugWise Backend server at the same time)*
