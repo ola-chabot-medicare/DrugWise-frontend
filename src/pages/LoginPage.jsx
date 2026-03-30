@@ -28,7 +28,9 @@ export default function LoginPage() {
   return (
     <div className="flex h-full relative">
       {/* LEFT — gradient panel */}
-      <div className="hidden md:flex w-3/5 relative bg-gradient-to-br from-blue-600 via-blue-500 to-teal-400 items-center justify-center overflow-hidden">
+      <div className="hidden md:flex w-3/5 relative items-center justify-center overflow-hidden"
+        style={{ background: 'linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 25%, #0ea5e9 60%, #14b8a6 100%)' }}
+      >
         {/* Faint wireframe hexagons */}
         <svg
           className="absolute inset-0 w-full h-full opacity-10 pointer-events-none"
@@ -61,7 +63,7 @@ export default function LoginPage() {
         {/* Radial glow behind center cluster */}
         <div
           className="absolute inset-0 pointer-events-none"
-          style={{ background: 'radial-gradient(circle at center, rgba(255,255,255,0.15) 0%, transparent 65%)' }}
+          style={{ background: 'radial-gradient(circle at 40% 50%, rgba(255,255,255,0.18) 0%, transparent 60%), radial-gradient(circle at 80% 80%, rgba(20,184,166,0.25) 0%, transparent 40%)' }}
         />
 
         {/* Center medical cross hex cluster */}
@@ -114,8 +116,8 @@ export default function LoginPage() {
           </svg>
 
           <div className="text-center">
-            <h1 className="text-white text-5xl font-bold tracking-wide">DrugWise</h1>
-            <p className="text-blue-200 text-base mt-1">Your Powerful AI Drug Assistant</p>
+            <h1 className="text-white text-5xl font-bold tracking-wide drop-shadow-lg">DrugWise</h1>
+            <p className="text-sky-200 text-base mt-2 font-medium">Your Powerful AI Drug Assistant</p>
           </div>
         </div>
       </div>
@@ -123,16 +125,18 @@ export default function LoginPage() {
       {/* Gradient divider line */}
       <div className="hidden md:block absolute top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-blue-200 to-transparent" style={{ left: '59.5%' }} />
 
-      {/* RIGHT — login form */}
-      <div className="flex-1 md:w-2/5 bg-white border-l border-gray-100 flex flex-col items-center justify-between py-10 px-20">
+      {/* RIGHT — login form (glass card) */}
+      <div className="flex-1 md:w-2/5 flex flex-col items-center justify-between py-10 px-20"
+        style={{ background: 'linear-gradient(160deg, #f8faff 0%, #f0f9ff 100%)' }}
+      >
         <div
           className="w-full max-w-sm flex-1 flex flex-col justify-center animate-fade-in-up opacity-0"
           style={{ animationDelay: '0.2s' }}
         >
           {/* Logo */}
-          <div className="flex items-center gap-2 mb-8">
-            <DrugWiseLogo size={36} />
-            <span className="text-blue-600 font-bold text-xl">DrugWise</span>
+          <div className="flex items-center gap-3 mb-8">
+            <DrugWiseLogo size={56} />
+            <span className="text-blue-600 font-black tracking-tight text-3xl">DrugWise</span>
           </div>
 
           <h2 className="text-3xl font-bold text-slate-800 mb-1">Welcome!</h2>
@@ -192,8 +196,11 @@ export default function LoginPage() {
               type="submit"
               onMouseEnter={() => setBtnGlow(true)}
               onMouseLeave={() => setBtnGlow(false)}
-              className="w-full bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white font-semibold py-3.5 rounded-full transition text-base shadow-sm mt-2"
-              style={btnGlow ? { animation: 'pulse-glow 2s ease-in-out infinite' } : {}}
+              className="w-full text-white font-semibold py-3.5 rounded-full transition text-base shadow-md mt-2 hover:-translate-y-0.5 hover:shadow-lg transition-all duration-200"
+              style={{
+                background: 'linear-gradient(135deg, #1d4ed8, #0ea5e9, #14b8a6)',
+                ...(btnGlow ? { animation: 'pulse-glow 2s ease-in-out infinite' } : {})
+              }}
             >
               Log in
             </button>
@@ -201,7 +208,10 @@ export default function LoginPage() {
 
           {/* HIPAA badge */}
           <div className="mt-5 flex justify-center">
-            <span className="text-xs text-slate-400 border border-slate-200 rounded-full px-4 py-1.5">
+            <span
+              className="text-xs font-medium px-4 py-1.5 rounded-full"
+              style={{ background: 'linear-gradient(135deg,rgba(59,130,246,0.1),rgba(20,184,166,0.1))', border: '1px solid rgba(59,130,246,0.25)', color: '#1d4ed8' }}
+            >
               🔒 HIPAA Compliance
             </span>
           </div>

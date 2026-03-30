@@ -71,13 +71,12 @@ export default function useChatHistory() {
     [persist],
   );
 
-  const deleteSession = useCallback(
-    (id) => {
-      persist((prev) => prev.filter((s) => s.id !== id));
-      setActiveSessionId((prevId) => (prevId === id ? null : prevId));
-    },
-    [persist],
-  );
+  const deleteSession = useCallback((id) => {
+    // Use persist (functional updater) so we always read from current React
+    // state, not from localStorage which may lag behind pending renders.
+    persist((prev) => prev.filter((s) => s.id !== id));
+    setActiveSessionId((prevId) => (prevId === id ? null : prevId));
+  }, [persist]);
 
   const loadSession = useCallback(
     (id) => {
@@ -101,10 +100,15 @@ export default function useChatHistory() {
     (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt),
   );
 
+  // Derived: messages of the currently active session (empty array if none)
+  const activeSession = sessions.find((s) => s.id === activeSessionId);
+  const currentMessages = activeSession ? activeSession.messages : [];
+
   return {
     sessions: sortedSessions,
     activeSessionId,
     setActiveSessionId,
+    currentMessages,
     createSession,
     saveSession,
     deleteSession,

@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8000',
-  timeout: 30000,
+  timeout: 60000, // Increased to 60s because RAG + LLM can be slow
 });
 
 export async function sendMessage(message) {

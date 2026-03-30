@@ -3,10 +3,10 @@ import { useState, useCallback } from 'react';
 const STORAGE_KEY = 'drugwise_reminders';
 
 const DEFAULT_REMINDERS = [
-  { id: '1', text: "It's time for your Amlodipine 5mg dose.", time: '7:00 AM', color: 'green' },
-  { id: '2', text: 'Take Metformin 500mg with breakfast.', time: '8:00 AM', color: 'green' },
-  { id: '3', text: 'Blood pressure check reminder.', time: '12:00 PM', color: 'green' },
-  { id: '4', text: 'Evening medication: Lisinopril 10mg.', time: '8:00 PM', color: 'green' },
+  { id: '1', text: "It's time for your Amlodipine 5mg dose.", time: '07:00', color: 'green' },
+  { id: '2', text: 'Take Metformin 500mg with breakfast.', time: '08:00', color: 'green' },
+  { id: '3', text: 'Blood pressure check reminder.', time: '12:00', color: 'green' },
+  { id: '4', text: 'Evening medication: Lisinopril 10mg.', time: '20:00', color: 'green' },
 ];
 
 function saveToStorage(reminders) {

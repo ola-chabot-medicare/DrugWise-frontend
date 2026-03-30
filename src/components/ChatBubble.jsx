@@ -30,7 +30,10 @@ function parseMarkdown(text) {
     if (line.startsWith('- ') || line.startsWith('* ')) {
       return (
         <div key={i} className="flex gap-1.5 text-base text-slate-700">
-          <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-slate-400 flex-shrink-0" />
+          <span
+            className="mt-2 w-1.5 h-1.5 rounded-full flex-shrink-0"
+            style={{ background: 'linear-gradient(135deg, #3b82f6, #14b8a6)' }}
+          />
           <span>{parseBold(line.slice(2))}</span>
         </div>
       );
@@ -40,16 +43,21 @@ function parseMarkdown(text) {
       const content = line.replace(/^\d+\. /, '');
       return (
         <div key={i} className="flex gap-1.5 text-base text-slate-700">
-          <span className="text-slate-500 flex-shrink-0 font-medium">{num}.</span>
+          <span
+            className="flex-shrink-0 font-semibold text-sm"
+            style={{ background: 'linear-gradient(135deg, #3b82f6, #14b8a6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}
+          >
+            {num}.
+          </span>
           <span>{parseBold(content)}</span>
         </div>
       );
     }
-    // Sub-bullet: starts with spaces then - or ·
+    // Sub-bullet
     if (/^\s+[-·•]\s/.test(line)) {
       return (
         <div key={i} className="flex gap-1.5 text-sm text-slate-600 ml-5">
-          <span className="text-slate-300 flex-shrink-0">◦</span>
+          <span className="text-blue-300 flex-shrink-0">◦</span>
           <span>{parseBold(line.trim().slice(2))}</span>
         </div>
       );
@@ -66,7 +74,10 @@ export default function ChatBubble({ message, isUser, onRegenerate, isError }) {
     return (
       <div className="flex flex-col items-end gap-1 animate-message-user">
         <span className="text-xs text-slate-400 mr-1">Me</span>
-        <div className="bg-blue-600 rounded-2xl px-4 py-3 max-w-lg">
+        <div
+          className="rounded-2xl px-4 py-3 max-w-lg shadow-md"
+          style={{ background: 'linear-gradient(135deg, #3b82f6 0%, #0ea5e9 60%, #14b8a6 100%)' }}
+        >
           <p className="text-white text-base">{message.text}</p>
         </div>
       </div>
@@ -75,11 +86,21 @@ export default function ChatBubble({ message, isUser, onRegenerate, isError }) {
 
   return (
     <div className="flex items-start gap-3 animate-message-bot">
-      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-600 to-teal-500 flex items-center justify-center flex-shrink-0 mt-1 p-1.5">
+      {/* Bot avatar — vibrant gradient ring */}
+      <div
+        className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 mt-1 p-1.5 shadow-lg"
+        style={{ background: 'linear-gradient(135deg, #3b82f6 0%, #0ea5e9 50%, #14b8a6 100%)' }}
+      >
         <DrugWiseLogo size={32} />
       </div>
       <div className="flex-1 max-w-2xl">
-        <div className={`rounded-2xl shadow-sm px-4 py-3 space-y-0.5 ${isError || message.isError ? 'bg-red-50 border border-red-200' : 'bg-white'}`}>
+        <div
+          className={`rounded-2xl shadow-sm px-4 py-3 space-y-0.5 ${
+            isError || message.isError
+              ? 'bg-rose-50 border border-rose-200'
+              : 'bg-white/85 backdrop-blur border border-white/60'
+          }`}
+        >
           {parseMarkdown(message.text)}
         </div>
         <MessageActions message={message.text} onRegenerate={onRegenerate} />

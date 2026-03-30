@@ -1,21 +1,27 @@
 import { useState, useRef } from 'react';
-import { Phone, Mail, Calendar, MapPin, User, User2, UserCheck, X, Pill, Camera, MoreVertical, Sun, Moon } from 'lucide-react';
+import { Phone, Mail, Calendar, MapPin, User, User2, UserCheck, X, Pill, Camera, MoreVertical, Plus } from 'lucide-react';
 import profilePhoto from '../assets/profile.jpg';
 import useUserProfile from '../hooks/useUserProfile';
-import useDarkMode from '../hooks/useDarkMode';
 
 const STATUS_COLORS = {
-  active: 'bg-green-500',
-  warning: 'bg-red-500',
-  info: 'bg-yellow-500',
+  active:  'bg-emerald-400',
+  warning: 'bg-rose-500',
+  info:    'bg-amber-400',
 };
+
+// Rotating gradient palettes for each drug row
+const DRUG_PALETTES = [
+  { dot: '#10b981', bg: 'rgba(16,185,129,0.07)', border: 'rgba(16,185,129,0.18)', nameColor: '#065f46', scheduleColor: '#6ee7b7' },
+  { dot: '#f43f5e', bg: 'rgba(244,63,94,0.07)',  border: 'rgba(244,63,94,0.18)',  nameColor: '#881337', scheduleColor: '#fda4af' },
+  { dot: '#f59e0b', bg: 'rgba(245,158,11,0.07)', border: 'rgba(245,158,11,0.18)', nameColor: '#78350f', scheduleColor: '#fcd34d' },
+  { dot: '#8b5cf6', bg: 'rgba(139,92,246,0.07)', border: 'rgba(139,92,246,0.18)', nameColor: '#4c1d95', scheduleColor: '#c4b5fd' },
+];
 
 export default function UserProfileCard({ drugs, addDrug, deleteDrug }) {
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({ name: '', dosage: '', schedule: '', status: 'active' });
 
   const { profile, updateAvatar } = useUserProfile();
-  const { isDark, toggleDark } = useDarkMode();
   const fileInputRef = useRef(null);
 
   const handleAvatarUpload = (e) => {
@@ -38,8 +44,8 @@ export default function UserProfileCard({ drugs, addDrug, deleteDrug }) {
 
   return (
     <div>
-      {/* ── Profile card — full photo, no white section ── */}
-      <div className="relative w-full h-80 rounded-2xl overflow-hidden shadow-md">
+      {/* ── Profile card — full photo ── */}
+      <div className="relative w-full h-80 rounded-2xl overflow-hidden shadow-lg">
 
         {/* Layer 1 — Photo */}
         <img
@@ -51,85 +57,79 @@ export default function UserProfileCard({ drugs, addDrug, deleteDrug }) {
             e.target.nextSibling.style.display = 'flex';
           }}
         />
-        {/* Fallback — hidden unless image fails */}
-        <div
-          className="absolute inset-0 bg-gradient-to-br from-blue-100 to-teal-100 items-center justify-center hidden"
-        >
+        {/* Fallback */}
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-100 to-teal-100 items-center justify-center hidden">
           <User className="w-16 h-16 text-slate-300" />
         </div>
 
-        {/* Layer 2 — Dark gradient overlay */}
+        {/* Layer 2 — Rich gradient overlay */}
         <div
           className="absolute inset-0"
           style={{
             background:
-              'linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.55) 40%, rgba(0,0,0,0.1) 70%, transparent 100%)',
+              'linear-gradient(to top, rgba(15,23,42,0.92) 0%, rgba(15,23,42,0.6) 45%, rgba(15,23,42,0.1) 70%, transparent 100%)',
           }}
         />
 
-        {/* Layer 3 — Info stack, pinned to bottom */}
-        <div className="absolute bottom-0 left-0 right-0 px-4 pb-4 flex flex-col gap-1.5">
+        {/* Colorful tint strip at very bottom */}
+        <div
+          className="absolute bottom-0 left-0 right-0 h-1"
+          style={{ background: 'linear-gradient(90deg, #3b82f6, #0ea5e9, #14b8a6)' }}
+        />
+
+        {/* Layer 3 — Info stack */}
+        <div className="absolute bottom-2 left-0 right-0 px-4 pb-4 flex flex-col gap-2">
           {/* Name */}
-          <span className="text-white font-semibold text-sm leading-tight mb-1">
+          <span className="text-white font-bold text-lg leading-tight">
             Nguyen An Loc
           </span>
 
           {/* Gender + Role */}
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-1.5">
-              <User2 className="w-3 h-3 text-white/70 flex-shrink-0" />
-              <span className="text-[11px] text-white/80">Male</span>
+              <User2 className="w-4 h-4 text-sky-300 flex-shrink-0" />
+              <span className="text-sm text-white/90">Male</span>
             </div>
             <div className="flex items-center gap-1.5">
-              <UserCheck className="w-3 h-3 text-white/70 flex-shrink-0" />
-              <span className="text-[11px] text-white/80">Patient</span>
+              <UserCheck className="w-4 h-4 text-teal-300 flex-shrink-0" />
+              <span className="text-sm text-white/90">Patient</span>
             </div>
           </div>
 
           {/* Phone */}
           <div className="flex items-center gap-1.5">
-            <Phone className="w-3 h-3 text-white/70 flex-shrink-0" />
-            <span className="text-[11px] text-white/80">+65 9131 5790</span>
+            <Phone className="w-4 h-4 text-sky-300 flex-shrink-0" />
+            <span className="text-sm text-white/90">+65 9131 5790</span>
           </div>
 
           {/* Email */}
           <div className="flex items-center gap-1.5">
-            <Mail className="w-3 h-3 text-white/70 flex-shrink-0" />
-            <span className="text-[11px] text-white/80">anlocngdz@gmail.com</span>
+            <Mail className="w-4 h-4 text-sky-300 flex-shrink-0" />
+            <span className="text-sm text-white/90">anlocngdz@gmail.com</span>
           </div>
 
           {/* Age + Location */}
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-1.5">
-              <Calendar className="w-3 h-3 text-white/70 flex-shrink-0" />
-              <span className="text-[11px] text-white/80">
-                Age: <span className="text-white font-semibold">20</span>
+              <Calendar className="w-4 h-4 text-teal-300 flex-shrink-0" />
+              <span className="text-sm text-white/90">
+                Age: <span className="text-white font-bold">20</span>
               </span>
             </div>
             <div className="flex items-center gap-1.5">
-              <MapPin className="w-3 h-3 text-white/70 flex-shrink-0" />
-              <span className="text-[11px] text-white/80">Singapore</span>
+              <MapPin className="w-4 h-4 text-teal-300 flex-shrink-0" />
+              <span className="text-sm text-white/90">Singapore</span>
             </div>
           </div>
         </div>
 
-        {/* Layer 4 — Top controls */}
         {/* Camera button — top-left */}
         <button
           onClick={() => fileInputRef.current?.click()}
-          className="absolute top-3 left-3 bg-black/30 hover:bg-black/50 backdrop-blur-sm rounded-full p-1.5 cursor-pointer transition-colors z-10"
+          className="absolute top-3 left-3 bg-black/35 hover:bg-black/55 backdrop-blur-sm rounded-full p-2 cursor-pointer transition-colors z-10"
           title="Upload photo"
         >
           <Camera className="w-4 h-4 text-white" />
-        </button>
-
-        {/* Dark Mode toggle — top-right */}
-        <button
-          onClick={toggleDark}
-          className="absolute top-3 right-10 bg-black/30 hover:bg-black/50 backdrop-blur-sm rounded-full p-1.5 cursor-pointer transition-colors z-10 mr-1"
-          title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
-        >
-          {isDark ? <Sun className="w-4 h-4 text-white" /> : <Moon className="w-4 h-4 text-white" />}
         </button>
 
         {/* Three-dot menu — top-right corner */}
@@ -151,77 +151,107 @@ export default function UserProfileCard({ drugs, addDrug, deleteDrug }) {
       />
 
       {/* ── Drug Management ── */}
-      <div className="mt-4">
-        <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3 flex items-center">
-          <Pill className="w-4 h-4 text-blue-500 mr-1.5 inline-flex" />
-          Drug management
-        </h3>
+      <div className="mt-5">
+        {/* Section header */}
+        <div className="flex items-center gap-2 mb-3">
+          <div
+            className="flex items-center justify-center w-7 h-7 rounded-xl shadow-sm"
+            style={{ background: 'linear-gradient(135deg, #3b82f6, #14b8a6)' }}
+          >
+            <Pill className="w-4 h-4 text-white" />
+          </div>
+          <h3
+            className="text-base font-bold uppercase tracking-wide"
+            style={{
+              background: 'linear-gradient(135deg,#3b82f6,#0ea5e9,#14b8a6)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+            }}
+          >
+            Drug Management
+          </h3>
+        </div>
 
         {drugs.length === 0 ? (
-          <p className="text-sm text-gray-400 italic text-center py-3">No medications tracked</p>
+          <p className="text-base text-gray-400 italic text-center py-3">No medications tracked</p>
         ) : (
-          <div>
-            {drugs.map((drug) => (
-              <div key={drug.id} className="flex items-start gap-2 group py-1.5 border-b border-gray-100 last:border-0">
-                <span
-                  className={`w-2 h-2 min-w-2 rounded-full ${STATUS_COLORS[drug.status] || 'bg-green-500'} flex-shrink-0 mt-1.5`}
-                />
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-700">
-                    {drug.name}
-                    {drug.dosage && <span className="text-sm text-gray-400 font-normal"> — {drug.dosage}</span>}
-                  </p>
-                  {drug.schedule && (
-                    <p className="text-xs text-gray-400">{drug.schedule}</p>
-                  )}
-                </div>
-                <button
-                  onClick={() => deleteDrug(drug.id)}
-                  className="opacity-0 group-hover:opacity-100 text-slate-400 hover:text-red-500 transition flex-shrink-0 mt-0.5"
+          <div className="flex flex-col gap-2">
+            {drugs.map((drug, idx) => {
+              const palette = DRUG_PALETTES[idx % DRUG_PALETTES.length];
+              return (
+                <div
+                  key={drug.id}
+                  className="flex items-start gap-3 group py-2.5 px-3 rounded-xl transition-all duration-150"
+                  style={{ background: palette.bg, border: `1px solid ${palette.border}` }}
                 >
-                  <X className="w-3 h-3" />
-                </button>
-              </div>
-            ))}
+                  {/* Glowing dot */}
+                  <span
+                    className="w-2.5 h-2.5 rounded-full flex-shrink-0 mt-1.5"
+                    style={{ background: palette.dot, boxShadow: `0 0 6px 2px ${palette.dot}55` }}
+                  />
+                  <div className="flex-1 min-w-0">
+                    <p className="text-base font-semibold" style={{ color: palette.nameColor }}>
+                      {drug.name}
+                      {drug.dosage && (
+                        <span className="text-sm font-normal text-slate-500"> — {drug.dosage}</span>
+                      )}
+                    </p>
+                    {drug.schedule && (
+                      <p className="text-sm mt-0.5 font-medium" style={{ color: palette.scheduleColor }}>
+                        {drug.schedule}
+                      </p>
+                    )}
+                  </div>
+                  <button
+                    onClick={() => deleteDrug(drug.id)}
+                    className="opacity-0 group-hover:opacity-100 text-slate-300 hover:text-rose-400 transition flex-shrink-0 mt-1"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              );
+            })}
           </div>
         )}
 
         {showForm ? (
-          <div className="mt-3 space-y-2 bg-white rounded-lg border border-slate-200 p-3">
+          <div className="mt-3 space-y-2 bg-white/70 backdrop-blur rounded-2xl border border-white/80 p-3 shadow-sm">
             <input
               type="text"
               placeholder="Drug name (e.g. Amlodipine)"
               value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })}
-              className="w-full text-xs border border-slate-200 rounded-lg px-3 py-2 outline-none focus:border-blue-400 transition"
+              className="w-full text-base border border-slate-200 rounded-xl px-3 py-2.5 outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition bg-white"
             />
             <input
               type="text"
               placeholder="Dosage (e.g. 5mg daily)"
               value={form.dosage}
               onChange={(e) => setForm({ ...form, dosage: e.target.value })}
-              className="w-full text-xs border border-slate-200 rounded-lg px-3 py-2 outline-none focus:border-blue-400 transition"
+              className="w-full text-base border border-slate-200 rounded-xl px-3 py-2.5 outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition bg-white"
             />
             <input
               type="text"
-              placeholder="Schedule (e.g. 7:00 AM)"
+              placeholder="Schedule (e.g. 7:00 AM daily)"
               value={form.schedule}
               onChange={(e) => setForm({ ...form, schedule: e.target.value })}
-              className="w-full text-xs border border-slate-200 rounded-lg px-3 py-2 outline-none focus:border-blue-400 transition"
+              className="w-full text-base border border-slate-200 rounded-xl px-3 py-2.5 outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition bg-white"
             />
             <div className="flex items-center gap-2">
-              <span className="text-xs text-slate-500">Status:</span>
+              <span className="text-base text-slate-500">Status:</span>
               {[
-                { key: 'active', color: 'bg-green-500' },
-                { key: 'warning', color: 'bg-red-500' },
-                { key: 'info', color: 'bg-yellow-500' },
+                { key: 'active',  color: 'bg-emerald-400', label: 'Active' },
+                { key: 'warning', color: 'bg-rose-500',    label: 'Warning' },
+                { key: 'info',    color: 'bg-amber-400',   label: 'Info' },
               ].map((s) => (
                 <button
                   key={s.key}
                   type="button"
+                  title={s.label}
                   onClick={() => setForm({ ...form, status: s.key })}
-                  className={`w-4 h-4 rounded-full ${s.color} transition ${
-                    form.status === s.key ? 'ring-2 ring-offset-1 ring-blue-400' : 'opacity-50 hover:opacity-100'
+                  className={`w-5 h-5 rounded-full ${s.color} transition-transform hover:scale-110 ${
+                    form.status === s.key ? 'ring-2 ring-offset-1 ring-blue-400 scale-110' : 'opacity-50 hover:opacity-100'
                   }`}
                 />
               ))}
@@ -230,13 +260,14 @@ export default function UserProfileCard({ drugs, addDrug, deleteDrug }) {
               <button
                 onClick={handleAdd}
                 disabled={!form.name.trim()}
-                className="flex-1 text-sm bg-blue-600 text-white rounded-lg py-1.5 hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 text-base text-white rounded-xl py-2.5 font-semibold transition hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
+                style={{ background: 'linear-gradient(135deg, #3b82f6, #14b8a6)' }}
               >
                 Add
               </button>
               <button
                 onClick={() => setShowForm(false)}
-                className="flex-1 text-sm border border-slate-200 text-slate-600 rounded-lg py-1.5 hover:bg-slate-50 transition"
+                className="flex-1 text-base border border-slate-200 text-slate-600 rounded-xl py-2.5 hover:bg-slate-50 transition"
               >
                 Cancel
               </button>
@@ -245,9 +276,10 @@ export default function UserProfileCard({ drugs, addDrug, deleteDrug }) {
         ) : (
           <button
             onClick={() => setShowForm(true)}
-            className="border border-dashed border-blue-300 text-blue-500 text-xs rounded-lg px-3 py-1.5 hover:bg-blue-50 hover:border-blue-400 transition-all duration-150 w-full text-center mt-2 block"
+            className="mt-3 w-full flex items-center justify-center gap-2 text-base font-semibold text-blue-500 border border-dashed border-blue-300 rounded-xl px-3 py-3 hover:bg-blue-50 hover:border-blue-400 transition-all duration-150"
           >
-            + Add medication
+            <Plus className="w-4 h-4" />
+            Add medication
           </button>
         )}
       </div>

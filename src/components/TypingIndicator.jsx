@@ -1,10 +1,13 @@
+import DrugWiseLogo from '../assets/DrugWiseLogo';
+
 export default function TypingIndicator() {
   return (
     <div className="flex items-start gap-3">
-      <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center flex-shrink-0 mt-1">
-        <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
-        </svg>
+      <div
+        className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 mt-1 p-1.5 shadow-lg"
+        style={{ background: 'linear-gradient(135deg, #3b82f6 0%, #0ea5e9 50%, #14b8a6 100%)' }}
+      >
+        <DrugWiseLogo size={32} />
       </div>
       <div className="bg-white rounded-xl shadow-sm px-4 py-3.5">
         <div className="flex items-center gap-1.5">
