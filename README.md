@@ -39,6 +39,6 @@ Want to try it yourself? Here's how to get it running on your computer:
    npm run dev
    ```
 
-4. **Open your browser** to `http://localhost:5173`! 🎉
+4. **Open your browser** to `http://localhost:5173`
 
 *(Note: To actually use the chatbot feature, you must also be running the separate DrugWise Backend server at the same time)*
