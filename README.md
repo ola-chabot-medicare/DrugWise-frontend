@@ -14,10 +14,10 @@ The goal of this application is to make finding drug information as easy, safe, 
 
 ## 🛠 Tech Stack
 
-- **React 19** ⚛️ (Started with Vite ⚡ for lightning-fast speeds)
-- **Tailwind CSS v4** 🌊 (For the beautiful gradients and animations)
-- **Axios** 🌐 (To safely connect to the Python AI backend)
-- **Lucide React** 🎨 (For all the clean UI icons)
+- **React 19** (Started with Vite for lightning-fast speeds)
+- **Tailwind CSS v4** (For the beautiful gradients and animations)
+- **Axios** (To safely connect to the Python AI backend)
+- **Lucide React** (For all the clean UI icons)
 
 ## 🚀 How to run locally
 
@@ -41,4 +41,24 @@ Want to try it yourself? Here's how to get it running on your computer:
 
 4. **Open your browser** to `http://localhost:5173`
 
-*(Note: To actually use the chatbot feature, you must also be running the separate DrugWise Backend server at the same time)*
+---
+
+## 🔌 Connecting to the Backend
+
+**To actually use the chatbot feature, you must also run the separate DrugWise Backend server.** 
+
+1. **Clone the backend repository** (in a separate folder):
+   ```bash
+   git clone https://github.com/ola-chabot-medicare/DrugWise-backend.git
+   cd DrugWise-backend
+   ```
+2. **Setup your environment variables**:
+   Create a `.env` file in the root of the backend folder and provide your own OpenAI key (this ensures your personal budget is never used by random viewers):
+   ```env
+   OPENAI_API_KEY=your_openai_key_here
+   ```
+   *(Check the `.env.example` file in the backend repository if you need to set up other variables like ChromaDB)*.
+3. **Run the backend server**:
+   ```bash
+   uvicorn main:app --reload
+   ```
