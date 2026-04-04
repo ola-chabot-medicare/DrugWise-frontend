@@ -16,8 +16,8 @@ const BOTTOM_RIGHT_HEXES = [3, 4, 5, 7, 8, 10, 11, 12, 13]; // animate-float-slo
 export default function LoginPage() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('anlocngdz@gmail.com');
+  const [password, setPassword] = useState('DemoPass12');
   const [btnGlow, setBtnGlow] = useState(false);
 
   const handleLogin = (e) => {
