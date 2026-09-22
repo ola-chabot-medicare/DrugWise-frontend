@@ -7,7 +7,7 @@ import ChatBubble from '../components/ChatBubble';
 import ChatInput from '../components/ChatInput';
 import TypingIndicator from '../components/TypingIndicator';
 import SuggestionChips from '../components/SuggestionChips';
-import { sendMessage, checkHealth } from '../api/client';
+import { sendMessage, checkHealth, baseURL } from '../api/client';
 import useChatHistory from '../hooks/useChatHistory';
 import useReminders from '../hooks/useReminders';
 import useDrugManagement from '../hooks/useDrugManagement';
@@ -51,7 +51,7 @@ export default function ChatPage() {
     checkHealth().catch(() => {
       setHealthWarn({
         id: 'health-warn',
-        text: "Could not connect to the DrugWise backend.\nPlease start the backend server with: uvicorn main:app --reload",
+        text: `Could not connect to the DrugWise backend at ${baseURL}.\nPlease start the backend server with: uvicorn main:app --reload`,
         isUser: false,
         isError: true,
       });
@@ -99,7 +99,7 @@ export default function ChatPage() {
         id: `b-${Date.now()}`,
         text:
           err.message ||
-          "Sorry, I'm having trouble connecting right now.\nPlease make sure the backend is running on port 8000.",
+          `Sorry, I'm having trouble connecting right now.\nPlease make sure the backend is running at ${baseURL}.`,
         isUser: false,
         isError: true,
       };
@@ -141,7 +141,7 @@ export default function ChatPage() {
           id: `b-${Date.now()}`,
           text:
             err.message ||
-            "Sorry, I'm having trouble connecting right now.\nPlease make sure the backend is running on port 8000.",
+            `Sorry, I'm having trouble connecting right now.\nPlease make sure the backend is running at ${baseURL}.`,
           isUser: false,
           isError: true,
         },

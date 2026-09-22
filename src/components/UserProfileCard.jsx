@@ -50,7 +50,7 @@ export default function UserProfileCard({ drugs, addDrug, deleteDrug }) {
         {/* Layer 1 — Photo */}
         <img
           src={avatarSrc}
-          alt="An Loc Nguyen"
+          alt="Profile photo"
           className="absolute inset-0 w-full h-full object-cover object-top"
           onError={(e) => {
             e.target.style.display = 'none';
@@ -81,31 +81,31 @@ export default function UserProfileCard({ drugs, addDrug, deleteDrug }) {
         <div className="absolute bottom-2 left-0 right-0 px-4 pb-4 flex flex-col gap-2">
           {/* Name */}
           <span className="text-white font-bold text-lg leading-tight">
-            Nguyen An Loc
+            {profile.name}
           </span>
 
           {/* Gender + Role */}
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-1.5">
               <User2 className="w-4 h-4 text-sky-300 flex-shrink-0" />
-              <span className="text-sm text-white/90">Male</span>
+              <span className="text-sm text-white/90">{profile.gender}</span>
             </div>
             <div className="flex items-center gap-1.5">
               <UserCheck className="w-4 h-4 text-teal-300 flex-shrink-0" />
-              <span className="text-sm text-white/90">Patient</span>
+              <span className="text-sm text-white/90">{profile.role}</span>
             </div>
           </div>
 
           {/* Phone */}
           <div className="flex items-center gap-1.5">
             <Phone className="w-4 h-4 text-sky-300 flex-shrink-0" />
-            <span className="text-sm text-white/90">+65 9131 5790</span>
+            <span className="text-sm text-white/90">{profile.phone}</span>
           </div>
 
           {/* Email */}
           <div className="flex items-center gap-1.5">
             <Mail className="w-4 h-4 text-sky-300 flex-shrink-0" />
-            <span className="text-sm text-white/90">anlocngdz@gmail.com</span>
+            <span className="text-sm text-white/90">{profile.email}</span>
           </div>
 
           {/* Age + Location */}
@@ -113,12 +113,12 @@ export default function UserProfileCard({ drugs, addDrug, deleteDrug }) {
             <div className="flex items-center gap-1.5">
               <Calendar className="w-4 h-4 text-teal-300 flex-shrink-0" />
               <span className="text-sm text-white/90">
-                Age: <span className="text-white font-bold">20</span>
+                Age: <span className="text-white font-bold">{profile.age}</span>
               </span>
             </div>
             <div className="flex items-center gap-1.5">
               <MapPin className="w-4 h-4 text-teal-300 flex-shrink-0" />
-              <span className="text-sm text-white/90">Singapore</span>
+              <span className="text-sm text-white/90">{profile.location}</span>
             </div>
           </div>
         </div>

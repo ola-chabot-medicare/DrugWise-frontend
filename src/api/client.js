@@ -1,7 +1,9 @@
 import axios from 'axios';
 
+const baseURL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
 const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8000',
+  baseURL,
   timeout: 60000, // Increased to 60s because RAG + LLM can be slow
 });
 
@@ -15,7 +17,7 @@ export async function sendMessage(message) {
     return response.data;
   } catch (error) {
     throw new Error(
-      "Sorry, I'm having trouble connecting right now. Please make sure the backend is running on port 8000."
+      `Sorry, I'm having trouble connecting right now. Please make sure the backend is running at ${baseURL}.`
     );
   }
 }
@@ -25,4 +27,5 @@ export async function checkHealth() {
   return response.data;
 }
 
+export { baseURL };
 export default apiClient;

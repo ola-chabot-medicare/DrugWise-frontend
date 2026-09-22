@@ -3,13 +3,13 @@ import { useState, useCallback } from 'react';
 const STORAGE_KEY = 'drugwise_user_profile';
 
 const DEFAULT_PROFILE = {
-  name: 'Nguyen An Loc',
-  gender: 'Male',
+  name: 'Jane Doe',
+  gender: 'Female',
   role: 'Patient',
-  phone: '+65 9131 5790',
-  email: 'anlocngdz@gmail.com',
-  age: 20,
-  location: 'Singapore',
+  phone: '+1 555 0100',
+  email: 'demo@drugwise.app',
+  age: 29,
+  location: 'San Francisco, CA',
   avatarUrl: null,
   avatarFrame: 'none',
 };
