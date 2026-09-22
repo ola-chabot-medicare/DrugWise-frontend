@@ -1,64 +1,77 @@
 # DrugWise Frontend
 
-DrugWise is a smart, interactive medical chatbot interface. It connects to a powerful AI backend to instantly answer complex medical questions based on real FDA drug data. 
+The chat UI for DrugWise, a medical drug-information chatbot. Talks to the
+[DrugWise backend](https://github.com/ola-chabot-medicare/DrugWise-backend),
+a FastAPI RAG service that answers questions from real FDA drug data instead
+of letting the model guess.
 
-The goal of this application is to make finding drug information as easy, safe, and beautiful as possible.
+## Why this exists
 
-## ✨ Features
+I built DrugWise's frontend to practice a chat UI that's more than a message
+list: multi-session history, markdown-formatted responses, and small
+localStorage-backed features (reminders, a medication tracker) layered on
+top of a real backend call, all without a backend account system.
 
-- 💬 **AI Medical Chat**: Ask any medication questions. The chat reads the AI's complex data and formats it perfectly with bold text, bullet points, and warning highlights.
-- ⏰ **Daily Reminders**: Add, edit, and color-code your daily medication schedule. It automatically converts your times into a simple AM/PM format.
-- 📋 **Medication Tracker**: Keep a running list of your active prescriptions with glowing status dots.
-- 💾 **Smart History**: Everything you type or save is instantly remembered in your browser. You can close the tab, come back tomorrow, and all your chats and reminders will still be there!
-- 🎨 **Glassmorphism UI**: Built with a sleek, modern, translucent design that reacts beautifully to your mouse movements.
 
-## 🛠 Tech Stack
+## Key features
 
-- **React 19** (Started with Vite for lightning-fast speeds)
-- **Tailwind CSS v4** (For the beautiful gradients and animations)
-- **Axios** (To safely connect to the Python AI backend)
-- **Lucide React** (For all the clean UI icons)
+- **AI medical chat**: ask any medication question; responses are rendered
+  through a small custom markdown parser (headings, bold, bullet lists) so
+  the backend's formatted answers display cleanly.
+- **Multi-session chat history**: sessions are created per conversation,
+  titled from the first message, and persisted to `localStorage` — close
+  the tab and come back later, everything's still there.
+- **Regenerate / copy**: re-run the last question against the backend, or
+  copy any bot response to the clipboard.
+- **Daily reminders & medication tracker**: add, edit, and color-code a
+  medication schedule and an active-prescription list, both localStorage-backed.
+- **Backend health check**: pings `/health` on load and shows an inline
+  warning bubble if the backend isn't reachable, instead of failing silently.
+- **Glassmorphism UI**: Tailwind v4, backdrop-blur panels, gradient accents.
 
-## 🚀 How to run locally
+## Tech stack
 
-Want to try it yourself? Here's how to get it running on your computer:
+Verified from `package.json`.
 
-1. **Clone the code** down to your computer:
-   ```bash
-   git clone https://github.com/ola-chabot-medicare/DrugWise-frontend.git
-   cd DrugWise-frontend
-   ```
+- React 19, built with Vite
+- Tailwind CSS v4
+- Axios
+- React Router DOM v7
+- Lucide React icons
 
-2. **Install the packages**:
-   ```bash
-   npm install
-   ```
+## Setup
 
-3. **Start the app**:
-   ```bash
-   npm run dev
-   ```
+### 1. Clone and install
 
-4. **Open your browser** to `http://localhost:5173`
+```bash
+git clone https://github.com/ola-chabot-medicare/DrugWise-frontend.git
+cd DrugWise-frontend
+npm install
+```
 
----
+### 2. Environment variables
 
-## 🔌 Connecting to the Backend
+`.env` already points `VITE_API_URL` at `http://localhost:8000` — no changes
+needed for local dev against the backend running on its default port.
 
-**To actually use the chatbot feature, you must also run the separate DrugWise Backend server.** 
+### 3. Run the backend
 
-1. **Clone the backend repository** (in a separate folder):
-   ```bash
-   git clone https://github.com/ola-chabot-medicare/DrugWise-backend.git
-   cd DrugWise-backend
-   ```
-2. **Setup your environment variables**:
-   Create a `.env` file in the root of the backend folder and provide your own OpenAI key (this ensures your personal budget is never used by random viewers):
-   ```env
-   OPENAI_API_KEY=your_openai_key_here
-   ```
-   *(Check the `.env.example` file in the backend repository if you need to set up other variables like ChromaDB)*.
-3. **Run the backend server**:
-   ```bash
-   uvicorn main:app --reload
-   ```
+The chat feature needs the [DrugWise backend](https://github.com/ola-chabot-medicare/DrugWise-backend)
+running separately — see its README for setup (it needs your own OpenAI and
+ChromaDB Cloud keys).
+
+### 4. Start the app
+
+```bash
+npm run dev
+```
+
+Open `http://localhost:5173`. The login screen accepts any email/password —
+there's no backend auth yet, it's a demo gate in front of the chat UI.
+
+### Other scripts
+
+```bash
+npm run build     # production build
+npm run lint       # eslint
+```
